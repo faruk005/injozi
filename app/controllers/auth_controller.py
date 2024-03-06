@@ -7,6 +7,7 @@ from bson import json_util
 
 auth_bp = Blueprint('auth', __name__)
 
+# login controller
 @auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -25,6 +26,7 @@ def login():
     auth_token = AuthService.encode_auth_token(user['_id'], mongo_uri)
     return jsonify({'user': user_json, 'token': auth_token}), 200
 
+# signup controller
 @auth_bp.route('/signup', methods=['POST'])
 def signup():
     data = request.get_json()

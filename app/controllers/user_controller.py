@@ -4,8 +4,10 @@ from app.models.user import User
 from bson import json_util
 from flask import current_app
 
+# blueprint
 user_bp = Blueprint('user', __name__)
 
+# get current user details controller
 @user_bp.route('/me', methods=['GET'])
 @jwt_required()
 def get_user_details():
@@ -19,6 +21,7 @@ def get_user_details():
     user['_id'] = str(user['_id']) 
     return jsonify({'user': user}), 200
 
+# update current user details controller
 @user_bp.route('/me', methods=['PUT'])
 @jwt_required()
 def edit_user_details():
@@ -49,6 +52,7 @@ def edit_user_details():
     user['_id'] = str(user['_id']) 
     return jsonify({'user': user}), 200
 
+# get all users controller
 @user_bp.route('/all', methods=['GET'])
 @jwt_required()
 def get_all_users():

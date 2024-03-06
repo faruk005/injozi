@@ -15,22 +15,21 @@ class User:
         self.db = self.client.get_database()
         self.collection = self.db.users
         User.collection = self.collection
-    
-    def save(self):
-        User.collection.replace_one({'_id': self.user_id}, self.to_dict())
-        
+     
+    # save user details on update  
     def save_user(self, user_data):
         user_id = user_data.pop('_id')  # Remove _id field temporarily
         self.collection.update_one({'_id': user_id}, {'$set': user_data})
         user_data['_id'] = user_id
 
+    # create a new user
     @staticmethod
     def create_user(name, email, password, role, phone):
         hashed_password = generate_password_hash(password)
         user_data = {
             'name': name,
             'email': email,
-            'password': hashed_password,
+            'password': hashed_password, #hash password once
             'role': role,
             'phone': phone
         }
@@ -40,19 +39,22 @@ class User:
     # def get_user_by_email(email):
     #     return User.collection.find_one({'email': email})
     
+    # return user by email
     @classmethod
     def get_user_by_email(cls, email):  # Use classmethod decorator
         return cls.collection.find_one({'email': email})
     
+    # return user by id
     @classmethod
     def get_user_by_id(cls,user_id):
         user_data = cls.collection.find_one({'_id': ObjectId(user_id)})
         # return user_data
         if user_data:
-                return user_data  # Create an instance of User with user_data
+                return user_data
         else:
             return None
     
+    # return all user
     @classmethod
     def get_all_users(cls):
         users_data = cls.collection.find({})
